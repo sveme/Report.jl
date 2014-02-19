@@ -1,6 +1,6 @@
 module Report
 
-import Base:write, close
+import Base.write, Base.close
 
 type Markdown
   filename::String
@@ -12,6 +12,11 @@ Markdown(filename) = Markdown(filename, "w", "", open(filename,"w"))
 Markdown(filename, writeorappend) = Markdown(filename, writeorappend,"", open(filename,writeorappend))
 Markdown(filename, writeorappend, figurefolder) = Markdown(filename, writeorappend,figurefolder, open(filename,writeorappend))
 close(doc::Markdown) = close(doc.iostream)
+
+type Header
+  level::Integer
+  text::String
+end
 
 type Author
   name::String
@@ -35,7 +40,7 @@ type Table
   ncolumn::Integer
   nrows::Integer
   header::Array{String}
-  data::Any
+  data::Array{Any}
   caption::String
 end
 

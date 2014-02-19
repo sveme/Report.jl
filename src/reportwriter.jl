@@ -2,6 +2,10 @@ function write(document::Markdown, author::Author)
     write(document.iostream, "")
 end
 
+function write(document::Markdown, header::Header)
+   write(document.iostream, "#"^header.level*header.text*"\n\n") 
+end
+
 function write(document::Markdown, table::Table)
     # TODO check that the length of columns is the larger of (header, maxlength(datarow))
     header = ""
@@ -49,6 +53,6 @@ function write(document::Markdown, paragraph::Paragraph)
     write(document.iostream, paragraph.text*"\n")
 end
 
-function write(document::Markdown, text::String)
+function write(document::Markdown, text::Union(ASCIIString,UTF8String))
     write(document.iostream, text*"\n")
 end
