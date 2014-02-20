@@ -37,8 +37,8 @@ type Code
 end
 
 type Table
-  ncolumn::Integer
   nrows::Integer
+  ncolumn::Integer
   header::Array{String}
   data::Array{Any}
   caption::String
