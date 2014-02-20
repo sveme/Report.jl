@@ -7,31 +7,41 @@ function write(document::Markdown, header::Header)
 end
 
 function write(document::Markdown, table::Table)
-    # TODO check that the length of columns is the larger of (header, maxlength(datarow))
+    # only works on string data arrays so far, so data need to be converted 
     header = ""
     underlines = ""
     dash = "-"
     rows = fill("", table.nrows)
     for i = 1:length(table.header)
+        # first get the maximum size for each column
         hlength = length(table.header[i])
-        header = header*"\t"*table.header[i]
-        underlines = underlines*dash^hlength*"\t"
-        for j = 1:length(rows)
-            cdata = table.data[j,i]
-            overlap = hlength - length(cdata)
-
-            # hack, use sprintf instead! cuts off stuff! 
-            overlap <= 0 ? cdata = cdata[1:end] : cdata*" "^overlap
-            rows[i] = rows[i]*cdata*"\t"
+        maxlength = hlength
+        for j = 1:table.nrows
+            datalength = length(table.data[j,i])
+            if datalength > maxlength
+                maxlength = datalength
+            end
         end
-        rows[i] = rows[i]*"\n"
+        # then write out the rows with spaces extending the cell to the maximum column size
+        for j = 1:table.nrows
+            cdata = table.data[j,i]
+            nspaces = maxlength - length(cdata) + 1
+            rows[j] = rows[j]*cdata*" "^nspaces
+        end 
+
+        nspaces = maxlength - hlength + 1
+        header = header*table.header[i]*" "^nspaces
+        underlines = underlines*dash^maxlength*" "
     end
 
     write(document.iostream,header*"\n")
     write(document.iostream,underlines*"\n")
     for r in rows
-        write(document.iostream,r)
+        write(document.iostream,r*"\n")
     end
+    write(document.iostream,underlines*"\n")
+    write(document.iostream,"\n")
+    # TODO: Caption!
 
 end
 
