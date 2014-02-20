@@ -11,7 +11,7 @@ function write(document::Markdown, table::Table)
     header = ""
     underlines = ""
     dash = "-"
-    rows = fill("", nrows)
+    rows = fill("", table.nrows)
     for i = 1:length(table.header)
         hlength = length(table.header[i])
         header = header*"\t"*table.header[i]

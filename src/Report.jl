@@ -1,6 +1,7 @@
 module Report
 
-import Base.write, Base.close
+import Base.write
+import Base.close
 
 type Markdown
   filename::String
