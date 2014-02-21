@@ -1,3 +1,10 @@
+
+function write(document::Markdown, block::Blockquote)
+    text = block.text 
+    # TODO put a > before all \n
+    write(document.iostream, ">$text")
+end
+
 function write(document::Markdown, author::Author)
     write(document.iostream, "")
 end
@@ -46,15 +53,33 @@ function write(document::Markdown, table::Table)
 end
 
 function write(document::Markdown, link::Link)
-    write(document.iostream,"["*link.text*"]", "("*link.url*")")
+    write(document.iostream,"["*link.text*"]("*link.url*")")
 end
 
 function write(document::Markdown, figure::Figure)
-    write(document.iostream,"!["*figure.caption*"]", "("*joinpath(document.figurefolder,figure.url)*")")
+    write(document.iostream,"!["*figure.caption*"]("*joinpath(document.figurefolder,figure.url)*")")
 end
 
 function write(document::Markdown, code::Code)
-    write(document.iostream, "~~~~~~~~{.$code.language}\n")
+    lang = code.language
+    head = ""
+    if code.identifier != ""
+        id = code.identifier
+        head = head*"#$id "
+    end
+    if lang != ""
+        head = head*".$lang "
+    end
+    if code.numberLines
+        startFrom = code.startFrom
+        head = head*".numberLines startFrom=$startFrom"
+    end
+    
+    if head != ""
+        head = "{"*head*"}"
+    end
+
+    write(document.iostream, "~~~~~~~~"*head*"\n")
     write(document.iostream, code.code*"\n")
     write(document.iostream, "~~~~~~~~\n")
 end
@@ -63,6 +88,6 @@ function write(document::Markdown, paragraph::Paragraph)
     write(document.iostream, paragraph.text*"\n")
 end
 
-function write(document::Markdown, text::Union(ASCIIString,UTF8String))
+function write(document::Markdown, text::String)
     write(document.iostream, text*"\n")
 end

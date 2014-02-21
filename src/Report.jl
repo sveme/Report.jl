@@ -19,6 +19,10 @@ type Header
   text::String
 end
 
+type Blockquote
+  text::String
+end
+
 type Author
   name::String
   email::String
@@ -35,7 +39,11 @@ end
 type Code
   language::String
   code::String
+  identifier::String
+  numberLines::Bool
+  startFrom::Integer
 end
+Code(language, code) = Code(language, code, "", false, 1)
 
 type Table
   nrows::Integer
