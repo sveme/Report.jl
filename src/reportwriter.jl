@@ -19,19 +19,21 @@ function write(document::Markdown, table::Table)
     underlines = ""
     dash = "-"
     rows = fill("", table.nrows)
+    # reshape = shape the data to fit the nrows and ncolumns - TODO: check for validity
+    data = reshape(table.data, table.nrows, table.ncolumns)
     for i = 1:length(table.header)
         # first get the maximum size for each column
         hlength = length(table.header[i])
         maxlength = hlength
         for j = 1:table.nrows
-            datalength = length(table.data[j,i])
+            datalength = length(string(data[j,i]))
             if datalength > maxlength
                 maxlength = datalength
             end
         end
         # then write out the rows with spaces extending the cell to the maximum column size
         for j = 1:table.nrows
-            cdata = table.data[j,i]
+            cdata = string(data[j,i])
             nspaces = maxlength - length(cdata) + 1
             rows[j] = rows[j]*cdata*" "^nspaces
         end 
@@ -47,9 +49,11 @@ function write(document::Markdown, table::Table)
         write(document.iostream,r*"\n")
     end
     write(document.iostream,underlines*"\n")
-    write(document.iostream,"\n")
-    # TODO: Caption!
-
+    caption = table.caption
+    if caption != ""
+        write(document.iostream,"Table: $caption\n")
+    end
+    write(document.iostream,"\n\n")
 end
 
 function write(document::Markdown, link::Link)
@@ -57,7 +61,13 @@ function write(document::Markdown, link::Link)
 end
 
 function write(document::Markdown, figure::Figure)
-    write(document.iostream,"!["*figure.caption*"]("*joinpath(document.figurefolder,figure.url)*")")
+    # to cover situations where the figure file has an absolute path
+    if document.figurefolder != ""
+        url = joinpath(document.figurefolder,figure.url)
+    else
+        url = figure.url
+    end
+    write(document.iostream,"!["*figure.caption*"]("*url*")\n\n")
 end
 
 function write(document::Markdown, code::Code)

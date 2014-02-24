@@ -47,7 +47,7 @@ Code(language, code) = Code(language, code, "", false, 1)
 
 type Table
   nrows::Integer
-  ncolumn::Integer
+  ncolumns::Integer
   header::Array{String}
   data::Array{Any}
   caption::String
