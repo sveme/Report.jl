@@ -2,7 +2,7 @@
 
 Lightweight Markdown report generator for Julia.
 
-The very general idea is that you can create markdown formatted reports from within Julia code. Potentially helpful when running a data analysis pipeline that creates tables and plots as output. Uses [pandoc](http://johnmacfarlane.net/pandoc/) Markdown and some of its extensions.
+The very general idea is that you can create markdown-formatted reports from within Julia code. Potentially helpful when running a data analysis pipeline that creates tables and plots as output. Uses [pandoc](http://johnmacfarlane.net/pandoc/) Markdown and some of its extensions.
 
 Some examples:
 
@@ -31,5 +31,3 @@ write(doc, Report.Figure(filename), "Yet another plot")
 """
 
 write(doc, Report.Code("julia", code))
-
-<!-- [![Build Status](https://travis-ci.org/sveme/Report.jl.png)](https://travis-ci.org/sveme/Report.jl) -->
