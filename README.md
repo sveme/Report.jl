@@ -19,7 +19,7 @@ write(doc, Report.Header(1, "Report on Report.jl"))
 write(doc, Report.Table(6, 3, ["Col1","Col2","Col3"], data, "Example table"))
 
 # add a plot that was stored in `filename`
-write(doc, Report.Figure(filename), "Yet another plot")
+write(doc, Report.Figure(filename, "Yet another plot"))
 
 # add some julia code to help you remember what you have done (uses fenced_code_blocks)
 
@@ -27,7 +27,7 @@ code = """
 doc = Report.Markdown("Report.md", "w", "figures")
 write(doc, Report.Header(1, "Report on Report.jl"))
 write(doc, Report.Table(6, 3, ["Col1","Col2","Col3"], data, "Example table"))
-write(doc, Report.Figure(filename), "Yet another plot")
+write(doc, Report.Figure(filename, "Yet another plot"))
 """
 
 write(doc, Report.Code("julia", code))
